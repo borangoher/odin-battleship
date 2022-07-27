@@ -24,16 +24,32 @@ const createGameboard = function () {
   };
 
   const hitBoard = function (tile) {
-    if (this.hit[tile] !== true) {
+    if (this.hit[tile - 1] !== true) {
       const takenTiles = this.computeTakenTiles();
       if (takenTiles.includes(tile)) {
         const ind = takenTiles.indexOf(tile);
         const shipInd = indToInd(ind);
         this.ships[shipInd].ship.hit();
-        this.hit[tile] = true;
+        this.hit[tile - 1] = true;
       } else {
-        this.hit[tile] = true;
+        this.hit[tile - 1] = true;
       }
+    } else {
+      throw new Error("AAAAAA");
+    }
+  };
+
+  const checkDefeat = function () {
+    let count = 0;
+    for (let i = 0; i < this.ships.length; i++) {
+      if (this.ships[i].ship.isSunk) {
+        count++;
+      }
+    }
+    if ((count === this.ships.length)) {
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -42,7 +58,8 @@ const createGameboard = function () {
     hit: new Array(100),
     placeShip,
     computeTakenTiles,
-    hitBoard
+    hitBoard,
+    checkDefeat,
   };
 };
 

@@ -5,6 +5,7 @@ let iterPlayer = 0;
 let currentAlingment = "ns";
 let playerBoard = createGameboard();
 let compBoard = createGameboard();
+let currentTurn = "player";
 
 const getShipLength = function (iter) {
   let len = 1;
@@ -47,23 +48,87 @@ const computeTilesToTake = function (length, tile, alignment) {
   return arr;
 };
 
-const placeShipPlayer = function (num) {
-    const newTiles = computeTilesToTake(getShipLength(iterPlayer), num, currentAlingment);
-    const oldTiles = playerBoard.computeTakenTiles();
-    const intersects = newTiles.some((num) => oldTiles.includes(num));
-    if (intersects) {
-        alert("You can't place intersecting ships!");
-    } else {
-        const newShip = createShip(getShipLength(iterPlayer), num, currentAlingment);
-        playerBoard.placeShip(newShip, num, currentAlingment);
-        iterPlayer++;
+const placeShipOnBoard = function (boardTaken, num) {
+  const newTiles = computeTilesToTake(
+    getShipLength(iterPlayer),
+    num,
+    currentAlingment
+  );
+  const oldTiles = boardTaken.computeTakenTiles();
+  const intersects = newTiles.some(function (num) {
+    return oldTiles.includes(num) || num > 100;
+  });
+  if (intersects) {
+    if (boardTaken !== compBoard) {
+      alert("You can't place intersecting/out of boardships!");
     }
+  } else {
+    const newShip = createShip(getShipLength(iterPlayer));
+    boardTaken.placeShip(newShip, num, currentAlingment);
+    iterPlayer++;
+  }
 
-    if (iterPlayer === 10) {
-        swapEventListeners();
+  if (iterPlayer === 10) {
+    swapEventListeners();
+  }
+
+  return boardTaken;
+};
+
+const initCompBoard = function () {
+  iterPlayer = 0;
+  while (iterPlayer < 10) {
+    if (Math.random() > 0.5) {
+      currentAlingment = "ns";
+    } else {
+      currentAlingment = "we";
     }
+    compBoard = placeShipOnBoard(compBoard, Math.ceil(Math.random() * 100));
+  }
+  iterPlayer = 0;
 };
 
 const swapEventListeners = function () {
-    //swap ship placement for missile hitting
-}
+  //swap ship placement for missile hitting
+};
+
+const placeShipEvent = function (tileClicked) {
+  playerBoard = placeShipOnBoard(playerBoard, tileClicked);
+};
+
+const hitEvent = function (tileClicked) {
+  try {
+    compBoard.hitBoard(tileClicked);
+    currentTurn = "comp";
+  } catch {
+    currentTurn = "player";
+  }
+};
+
+const initGame = function () {
+  initCompBoard();
+  while (iterPlayer < 10) {}
+  //message = game start
+};
+
+const startNewGameEvent = function () {
+  initGame();
+  while (!(playerBoard.checkDefeat() || compBoard.checkDefeat())) {
+    while (currentTurn === "player") {
+      //message = hit your opponent
+    }
+    playerBoard.hitBoard(Math.ceil(Math.random() * 100));
+  }
+
+  if (compBoard.checkDefeat()) {
+    //message = you won
+  } else {
+    //message = you lost
+  }
+};
+
+console.log("hello");
+initCompBoard();
+hitEvent(45);
+hitEvent(45);
+module.exports = placeShipOnBoard;
