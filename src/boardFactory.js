@@ -1,6 +1,7 @@
 const createGameboard = function () {
   const computeTakenTiles = function () {
     let arr = new Array(0);
+    let i;
     for (const ship of this.ships) {
       if (ship.alignment === "ns") {
         for (i = 0; i < ship.ship.length; i++) {
@@ -41,12 +42,13 @@ const createGameboard = function () {
 
   const checkDefeat = function () {
     let count = 0;
-    for (let i = 0; i < this.ships.length; i++) {
+    let i;
+    for (i = 0; i < this.ships.length; i++) {
       if (this.ships[i].ship.isSunk) {
         count++;
       }
     }
-    if ((count === this.ships.length)) {
+    if (count === this.ships.length) {
       return true;
     } else {
       return false;
@@ -54,7 +56,7 @@ const createGameboard = function () {
   };
 
   return {
-    ships: new Array((arrayLength = 0)),
+    ships: new Array(0),
     hit: new Array(100),
     placeShip,
     computeTakenTiles,
@@ -87,4 +89,4 @@ const indToInd = function (ind) {
   }
 };
 
-module.exports = createGameboard;
+export { createGameboard };

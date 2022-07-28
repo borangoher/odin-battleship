@@ -18,4 +18,4 @@ const createShip = function (length, hitSpots = 0, isSunk = false) {
   return ship;
 };
 
-module.exports = createShip;
+export { createShip };

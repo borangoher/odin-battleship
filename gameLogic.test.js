@@ -1,6 +1,6 @@
-const createGameboard = require("./boardFactory");
-const createShip = require("./shipFactory");
-const placeShipOnBoard = require("./gameLogic");
+import createGameboard from "./src/boardFactory.js";
+import createShip from "./src/shipFactory.js";
+import placeShipOnBoard from "./src/index.js";
 
 let iterPlayer;
 let currentAlingment;

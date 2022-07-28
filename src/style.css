@@ -69,3 +69,8 @@ button {
 .hit {
     background-color: red;
 }
+
+#button-cont {
+    display: flex;
+    gap: 0.2vw;
+}
